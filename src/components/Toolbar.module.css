@@ -1,31 +1,129 @@
-.toolbar {
-  position: fixed;
-  bottom: 20px;
+:root {
+  --accent: #00d8ff;
+  --button-bg: #1f1f1f;
+  --button-bg-active: #282828;
+  --toolbar-bg: rgba(20, 20, 20, 0.9);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Animation                                                      */
+/* ─────────────────────────────────────────────────────────────── */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Component Classes                                              */
+/* ─────────────────────────────────────────────────────────────── */
+
+.active {
+  background: var(--button-bg-active) !important;
+}
+
+.active::after {
+  animation: pulse 1.6s infinite;
+  background: var(--accent);
+  border-radius: 6px;
+  content: "";
+  filter: blur(6px);
+  height: 80%;
   left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  display: flex;
-  gap: 10px;
-  z-index: 1000;
+  opacity: 0.25;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  z-index: -1;
+}
+
+.grabHandle {
+  cursor: grab;
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(3, 4px);
+  grid-template-rows: repeat(3, 4px);
+  height: 16px;
+  padding: 2px;
+  width: 16px;
+}
+
+.grabHandle > * {
+  background-color: #ccc;
+  border-radius: 50%;
+  height: 4px;
+  width: 4px;
+}
+
+.icon {
+  display: block;
+  height: 24px;
+  margin-bottom: 4px;
+  width: 24px;
+}
+
+.icon use {
+  fill: var(--accent) !important;
+  stroke: var(--accent) !important;
+}
+
+.label {
+  color: var(--accent);
+  display: block;
+  font-size: 0.75rem;
+  user-select: none;
 }
 
 .toolButton {
-  padding: 6px 10px;
-  background: #eee;
-  color: #000;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--button-bg);
+  border: none;
+  border-radius: 8px;
+  color: var(--accent);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 0.9rem;
+  margin: 0 6px;
+  padding: 8px 14px;
+  position: relative;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.active {
-  background: #222;
-  color: #fff;
-}
 .toolButton:hover {
-  background: #e4f46b;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.toolbar {
+  align-items: center;
+  backdrop-filter: blur(4px);
+  background: var(--toolbar-bg);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  display: flex;
+  gap: 10px;
+  /*  Properties for centering the toolbar breaks manual positioning!!
+  left: 50%;
+  padding: 8px 12px;
+  bottom: 20px;
+  */
+  position: fixed;
+  z-index: 1000;
+}
+
+.tooltipBox {
+  background: #222;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 2000;
+  white-space: pre-line;
 }

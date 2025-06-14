@@ -3,11 +3,29 @@
 import type { Point, Shape } from "../lib/firebase";
 import { distance } from "./geometry";
 
-
 /**
  * All direct CanvasRenderingContext2D drawing routines
  */
 
+/**
+ * Clears the entire canvas.
+ *
+ * @param ctx - The CanvasRenderingContext2D to clear.
+ * @example
+ * clearCanvas(ctx);
+ */
+export function clearCanvas(ctx: CanvasRenderingContext2D): void {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
+
+/**
+ * Draws a grid on the canvas.
+ *
+ * @param ctx - The canvas rendering context.
+ * @param gridSize - The spacing between grid lines in pixels. Default is 50.
+ * @example
+ * drawGrid(ctx, 50);
+ */
 export function drawGrid(
   ctx: CanvasRenderingContext2D,
   gridSize: number = 50
@@ -29,6 +47,16 @@ export function drawGrid(
   }
 }
 
+/**
+ * Draws an arrowhead at the end of a line from `from` to `to`.
+ *
+ * @param ctx - The canvas rendering context.
+ * @param from - The starting point of the arrow.
+ * @param to - The ending point of the arrow.
+ * @param size - The size of the arrowhead. Default is 8.
+ * @example
+ * drawArrowhead(ctx, {x: 0, y: 0}, {x: 10, y: 10});
+ */
 export function drawArrowhead(
   ctx: CanvasRenderingContext2D,
   from: Point,
@@ -48,6 +76,16 @@ export function drawArrowhead(
   ctx.stroke();
 }
 
+/**
+ * Draws a distance label between two points.
+ *
+ * @param ctx - The canvas rendering context.
+ * @param start - The starting point.
+ * @param end - The ending point.
+ * @param gridSize - Grid size used to calculate feet. Default is 50.
+ * @example
+ * drawDistanceLabel(ctx, {x: 0, y: 0}, {x: 100, y: 0});
+ */
 export function drawDistanceLabel(
   ctx: CanvasRenderingContext2D,
   start: Point,
@@ -61,11 +99,22 @@ export function drawDistanceLabel(
   ctx.setLineDash([]);
   ctx.fillText(
     `${feet.toFixed(1)} ft`,
-    (start.x + end.x) / 2 + 5,
-    (start.y + end.y) / 2 - 5
+    (start.x + end.x) / 2 + 20, // Midpoint + Offset to avoid overlap
+    (start.y + end.y) / 2 - 20  // Midpoint - Offset to avoid overlap
   );
 }
 
+/**
+ * Draws a shape on the canvas based on its type.
+ *
+ * @param ctx - The canvas rendering context.
+ * @param shape - The shape object to draw.
+ * @param style - The rendering style: "preview" or "final".
+ * @param gridSize - Optional grid size for scaling. Default is 50.
+ * @returns void
+ * @example
+ * drawShape(ctx, { type: 'line', x: 0, y: 0, x2: 100, y2: 100 }, "preview", 50);
+ */
 export function drawShape(
   ctx: CanvasRenderingContext2D,
   shape: Shape,
@@ -170,11 +219,20 @@ export function drawShape(
   }
 }
 
+/**
+ * Draws a bounding box around selected shapes and a trash icon.
+ *
+ * @param ctx - The canvas rendering context.
+ * @param shapes - The array of shapes to consider for the bounding box.
+ * @param selectedIndices - A set of indices representing selected shapes.
+ * @example
+ * drawBoundingBox(ctx, shapes, new Set([0, 1, 2]));
+ */
 export function drawBoundingBox(
   ctx: CanvasRenderingContext2D,
   shapes: Shape[],
   selectedIndices: Set<number>
-) {
+): void {
   const idxs = Array.from(selectedIndices);
   if (!idxs.length) return;
   const pts = idxs.flatMap((i) => {

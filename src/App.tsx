@@ -1,10 +1,11 @@
 // src/App.tsx
-import { createSignal } from "solid-js";
+import RightPanel from "./components/RightPanel";
 import SceneCanvas from "./components/SceneCanvas";
 import Toolbar from "./components/Toolbar";
 import SceneEditor from "./components/SceneEditor";
 import SvgSprite from "./components/SvgSprite";
 import { Tool } from "./lib/types";
+import { createSignal } from "solid-js";
 
 export default function App() {
   const [selectedTool, setSelectedTool] = createSignal<Tool>(null);
@@ -31,6 +32,7 @@ export default function App() {
       />
 
       {/* Shared Toolbar */}
+      console.log("Rendering Toolbar from App.tsx");
       <Toolbar
         selectedTool={selectedTool()}
         setSelectedTool={setSelectedTool}
@@ -39,6 +41,9 @@ export default function App() {
 
       {/* DM-only tools */}
       {isDM && <SceneEditor />}
+
+      {/* Right Panel */}
+      <RightPanel />
     </>
   );
 }
